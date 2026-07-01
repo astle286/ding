@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test App with Cat</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #f0f0f0;
+    }
+
+    .cat {
+      width: 100px;
+      height: 100px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg') no-repeat center/cover;
+      border-radius: 50%;
+      position: relative;
+      animation: bounce 2s infinite, move 6s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-40px); }
+    }
+
+    @keyframes move {
+      0% { left: 0; }
+      50% { left: 200px; }
+      100% { left: 0; }
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="cat"></div>
+  <form action="/send" method="post">
+    <button type="submit">Send "astle"</button>
+  </form>
+</body>
+</html>
