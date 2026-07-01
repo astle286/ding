@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # Adjust host/port/user/password/dbname to match your local SQL setup
 DB_CONFIG = {
-    "host": "host.docker.internal",  # works on Mac/Windows; on Linux use machine IP
+    "host": "10.0.14.171",  # works on Mac/Windows; on Linux use machine IP
     "port": 5432,
     "user": "postgres",
     "password": "dingdong",
