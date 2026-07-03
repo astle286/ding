@@ -1,15 +1,24 @@
 from flask import Flask, render_template, request
 import psycopg2
+import os
+
+# Prometheus integration
+from prometheus_flask_exporter import PrometheusMetrics
+from prometheus_client import Counter
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)  # exposes /metrics endpoint
 
-# Adjust host/port/user/password/dbname to match your local SQL setup
+# Custom metric: count DB inserts
+insert_counter = Counter('db_inserts_total', 'Total inserts into names table')
+
+# DB config from environment variables
 DB_CONFIG = {
-    "host": "10.0.14.171",  # works on Mac/Windows; on Linux use machine IP
-    "port": 5432,
-    "user": "postgres",
-    "password": "dingdong",
-    "dbname": "dingdb"
+    "host": os.environ.get("DB_HOST", "localhost"),
+    "port": int(os.environ.get("DB_PORT", 5432)),
+    "user": os.environ.get("DB_USER", "postgres"),
+    "password": os.environ.get("DB_PASSWORD", "dingdong"),
+    "dbname": os.environ.get("DB_NAME", "dingdb")
 }
 
 @app.route("/")
@@ -21,11 +30,11 @@ def send():
     try:
         conn = psycopg2.connect(**DB_CONFIG)
         cur = conn.cursor()
-        # Example query: insert "astle" into a table
         cur.execute("INSERT INTO names (value) VALUES (%s)", ("astle",))
         conn.commit()
         cur.close()
         conn.close()
+        insert_counter.inc()  # increment Prometheus metric
         return "Inserted 'astle' successfully!"
     except Exception as e:
         return f"Error: {e}"
